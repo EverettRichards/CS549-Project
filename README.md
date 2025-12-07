@@ -21,3 +21,6 @@
 ### Executing Code
 * For each of the three models `{LogReg,RNN,KNN}.ipynb`, simply navigate to the notebook and click "Run All"
 * If you are missing any packages, and the `pip install` section does not automatically install them, please install the missing packages before proceeding
+
+## GitHub Repository
+https://github.com/EverettRichards/CS549-Project
