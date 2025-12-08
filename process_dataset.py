@@ -1,10 +1,11 @@
+import numpy as np
 import pandas as pd
 from urllib.parse import urldefrag
 from sklearn.decomposition import PCA
 
 common_tlds = ['com', 'org', 'net', 'de', 'uk', 'ca', 'edu', 'br', 'nl', 'info', 'au', 'ru', 'it', 'jp', 'pl', 'fr', 'gov', 'vn', 'eu', 'cn']
 
-def process_dataset(df,TEST_MODE=False,PCA_DIM=2):
+def process_dataset(df,TEST_MODE=False,PCA_DIM=2,NORMALIZE_TLD=False):
 
     dup_mask = df.duplicated()
     dup_count = dup_mask.sum()
@@ -70,7 +71,13 @@ def process_dataset(df,TEST_MODE=False,PCA_DIM=2):
     
     # Remove URL and other non-numeric artifacts
     df["TLD"] = df['full_domain'].apply(lambda x: x.split('.')[-1] if '.' in x else '')
-    df["TLD_freq"] = df["TLD"].map(df["TLD"].value_counts())
+    if NORMALIZE_TLD:
+        counts = df["TLD"].value_counts()
+        norm_counts = (counts - counts.min()) / (counts.max() - counts.min())
+        df["TLD_freq"] = df["TLD"].map(norm_counts).astype(float)
+    else:
+        counts = df["TLD"].value_counts()
+        df["TLD_freq"] = df["TLD"].map(counts).astype(int)
 
     # Remove unneeded non-numeric columns
     if not TEST_MODE:
@@ -83,6 +90,12 @@ def process_dataset(df,TEST_MODE=False,PCA_DIM=2):
     # Apply PCA to reduce dimensionality to PCA_DIM components for visualization and simplification
     if not TEST_MODE:
         pca = PCA(n_components=PCA_DIM)
-        X_full = pd.DataFrame(pca.fit_transform(X_full))
+        X_full_pca = pd.DataFrame(pca.fit_transform(X_full))
+        # Print out correlations between each feature in X_full with each PC
+        for col in X_full.columns:
+            for pc in X_full_pca.columns:
+                corr = np.corrcoef(X_full[col], X_full_pca[pc])[0, 1]
+                print(f"Correlation between {col} and PC{pc+1}: {corr}")
+        X_full = X_full_pca
 
     return X_full,y_full
