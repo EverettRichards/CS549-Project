@@ -10,6 +10,13 @@
 * `LogReg.ipynb`: Logistic Regression implementation, experiments, visualization, and results (Everett)
 * `RNN.ipynb`: Recurrent Neural Network (RNN) implementation, experiments, visualization, and results (AJ)
 * `KNN.ipynb`: K-Nearest Neighbors (KNN) implementation, experiments, visualization, and results (Talia)
+
+Note on RNN:
+The "RNN.ipynb" file runs a Recurrent Neural Network model, heavily inspired by a similar model in Assignment 4.
+The model itself runs by randomly choosing rows (with replacement) from the dataset in "malicious_phish.csv".
+In order to run this notebook properly, you must run every code block from top to bottom. There will be comments specifying what you can and cannot change.
+Once the last code block is finished running, you should be able to see the evaluations of the metrics and loss that the model developed! Furthermore, as a way to further reproduce the results, you can see the saved results of the evaluation metrics and loss values over time in the pickle files "rnn_results.pkl" and "rnn_results_2.pkl".
+
 ### Documentation
 * `ProjectReport.pdf`: Final project report.
 * `README.md`: This "Read Me" file! :)
